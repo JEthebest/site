@@ -5,15 +5,19 @@
 после запусти такие команды как
 
 -- python manage.py makemigrations
+
 -- python manage.py migrate
 
 когда будешь запускать эту команду впиши "username" и "password"
 можно пропустить "email"
 
+
 -- python manage.py createsuperuser
 
 
 и напоследок запусти
+
+
 -- python manage.py collectstatic
 
 
