@@ -22,6 +22,7 @@
 
 
 после запускай проект
+
 -- python manage.py runserver
 
 ЕСЛИ БУДУТ ОШИБКИ
