@@ -1,0 +1,172 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru" >
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %} {% endblock %}</title>
+  <link rel="shortcut icon" type='x-icon' href="{% static 'favicon.ico' %}"/>
+  <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+ <script src="//unpkg.com/alpinejs" defer></script>
+ <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<style>
+    [x-cloak] {
+      display: none;
+    }
+    
+    .form-radio {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      display: inline-block;
+      vertical-align: middle;
+      background-origin: border-box;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      flex-shrink: 0;
+      color: currentColor;
+      background-color: #fff;
+      border-color: #e2e8f0;
+      border-width: 1px;
+      height: 1.4em;
+      width: 1.4em;
+    }
+
+    .form-radio {
+      border-radius: 50%;
+    }
+
+    .form-radio:checked {
+      background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8' cy='8' r='3'/%3e%3c/svg%3e");
+      border-color: transparent;
+      background-color: currentColor;
+      background-size: 100% 100%;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+    .navbar {
+      background-color: #333; /* Цвет фона */
+      overflow: hidden;
+    }
+
+    .navbar a {
+      float: left; /* Выравниваем ссылки слева */
+      display: block; /* Показываем ссылки как блоки */
+      color: white; /* Цвет текста */
+      text-align: center; /* Выравниваем текст по центру */
+      padding: 14px 16px; /* Отступы для ссылок */
+      text-decoration: none; /* Убираем подчеркивание */
+    }
+
+    .navbar a:hover {
+      background-color: #ddd; /* Изменяем цвет фона при наведении */
+      color: black; /* Изменяем цвет текста при наведении */
+    }
+    .shade {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #fff;
+        border-radius: 5px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        z-index: 1000;
+    }
+
+    .shade h2 {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .shade ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .shade ul li {
+        margin-bottom: 5px;
+    }
+
+    .shade a {
+        text-decoration: none;
+        color: #007bff;
+    }
+
+    .shade a#close-button {
+        display: block;
+        text-align: center;
+        margin-top: 10px;
+        color: #fff;
+        background-color: #007bff;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <body>
+  
+    <!-- Остальное содержимое страницы (оставляем без изменений) -->
+  
+  <script>
+    const openShadeButton = document.getElementById('open-shade-button');
+    const shade = document.getElementById('shade');
+    const subprojectsList = document.getElementById('subprojects-list');
+    const closeButton = document.getElementById('close-button');
+    let shadeVisible = false;
+
+    openShadeButton.addEventListener('click', function (e) {
+        e.preventDefault();
+        
+        if (!shadeVisible) {
+            // Здесь вы можете использовать AJAX или Fetch API для загрузки саб-проектов с сервера
+            // Пример с Fetch API:
+            fetch('/api/get-subprojects') // Замените на URL вашего API для получения саб-проектов
+                .then(response => response.json())
+                .then(data => {
+                    // Очищаем список саб-проектов
+                    subprojectsList.innerHTML = '';
+                    
+                    // Добавляем саб-проекты в список
+                    data.forEach(subproject => {
+                        const subprojectItem = document.createElement('li');
+                        subprojectItem.innerHTML = `<a href="#" data-subproject="${subproject.id}">${subproject.name}</a>`;
+                        subprojectsList.appendChild(subprojectItem);
+                    });
+                    
+                    // Показываем шторку
+                    shade.style.display = 'block';
+                    shadeVisible = true;
+                })
+                .catch(error => {
+                    console.error('Ошибка при загрузке саб-проектов:', error);
+                });
+        }
+    });
+
+    closeButton.addEventListener('click', function (e) {
+        e.preventDefault();
+        shade.style.display = 'none';
+        shadeVisible = false;
+    });
+
+    // Обработчик события для выбора саб-проекта (как в предыдущих ответах)
+    subprojectsList.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (e.target.tagName === 'A') {
+            const selectedSubproject = e.target.getAttribute('data-subproject');
+            window.location.href = `/create?subproject=${selectedSubproject}`;
+        }
+    });
+  </script>
+  </body>
+{% block content %}
+{% endblock %}
+
+</body>
+</html>
